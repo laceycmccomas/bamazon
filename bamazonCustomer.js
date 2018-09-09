@@ -2,60 +2,60 @@ var inquirer = require("inquirer");
 var mysql = require("mysql");
 var inquirerCall = require("./index");
 
-//setup for connection call
-var conn = mysql.createConnection({
+
+var connection = mysql.createConnection({
     host: "localhost",
     port: 3333,
     user: "root",
     password: "root",
-    database: "bamazon"
+    database: "bamazon_db"
 });
 
 var customer = function() {   
-    //Connect to SQL database
+
     conn.connect(function(err) {
         if(err) throw err;
-        readlistings();
-    })
+        customerListings();
+    });
 };
 
-//function to read current listings
-var readlistings = function() {
+
+var customerListings = function() {
     conn.query("select * from products", function(err, res) {
         if (err) throw err;
         for (var m=0; m<res.length; m++) {
             console.log(`ID: ${res[m].item_id}, Product: ${res[m].product_name}, Price: $${res[m].price}`);
         }
-        custInquirerCall();
+        customerInquirer();
     })
 };
 
-//function to prompt users to enter info for items and quantity they want to buy
-var chosenId, chosenUnits;
-var custInquirerCall = function() {
+
+
+var customerInquirer = function() {
     inquirer.prompt([
         {
-        name: "id",
+        name: "name",
         type: "input",
-        message: "What is the ID of the item you would like to buy?"
+        message: "What is the name of the item you would like to buy?"
         },
         {
-        name: "units",
+        name: "cases",
         type: "input",
-        message: "How many units would you like to buy?"
+        message: "How many cases would you like to buy?"
         }
     ]).then(function(response) {
-        chosenId = response.id;
-        chosenUnits = response.units;
+        itemName = response.name;
+        numOfCases = response.cases;
         custCheckAvail();
-    })
+    });
 };
 
-//function to check if requested item is available in quantity requested 
+/
 var actualUnits, itemPrice;
 var custCheckAvail = function() {
     //search through database for quantity of id entered
-    conn.query("select stock_quantity, price from products where ?", 
+    conn.query("select how many, price from products where ?", 
     {
         item_id: chosenId
     }, function(err, data) {
@@ -63,18 +63,18 @@ var custCheckAvail = function() {
         actualUnits = data[0].stock_quantity;
         itemPrice = data[0].price;
         if(chosenUnits > actualUnits) {
-            console.log("Insufficient Quantity");
-            //start over and see what view they would like to use
+            console.log("Not Enough");
+            
             conn.end();
         }
         else {
-            custUpdate();
+            customerUpdate();
         }
     })       
 };
 
-//function to update database and display amount owed
-var custUpdate = function() {
+
+var customerUpdate = function() {
     // update products set stock_quantity=200 where item_id=1;
     var newQuantity = actualUnits - chosenUnits;
     var owed = itemPrice*chosenUnits;
@@ -87,7 +87,7 @@ var custUpdate = function() {
     ], function(error, response) {
         if (error) throw error;
     });
-    console.log(`You owe Bamazon $${owed}`);
+    console.log(`You now owe Bamazon $${owed}`);
 };
 
 module.exports = customer;
