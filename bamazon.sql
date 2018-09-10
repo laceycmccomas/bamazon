@@ -16,20 +16,20 @@ values ("salmon", "seafood", 1, 9000);
 insert into products(product_name, department_name, price, stock_quantity)
 values ("apple", "produce", 6, 450);
 insert into products(product_name, department_name, price, stock_quantity)
-values ("lipstick", "cosmetics", 150, 25);
+values ("lipstick", "cosmetics", 25, 300);
 insert into products(product_name, department_name, price, stock_quantity)
-values ("toilet paper", "household", 22, 95);
+values ("toilet paper", "household", 23, 86);
 insert into products(product_name, department_name, price, stock_quantity)
-values ("spatula", "household", 1, 500);
+values ("spatula", "household", 2, 465);
 insert into products(product_name, department_name, price, stock_quantity)
-values ("shower curtain", "household", 164, 81);
+values ("shower curtain", "household", 10, 271);
 insert into products(product_name, department_name, price, stock_quantity)
-values ("pinot noir", "beverages", 4, 1000);
+values ("pinot noir", "beverages", 16, 800);
 insert into products(product_name, department_name, price, stock_quantity)
-values ("olives", "produce", 12, 875);
+values ("olives", "produce", 365, 200);
 insert into products(product_name, department_name, price, stock_quantity)
-values ("espresso", "beverages", 190, 45);
+values ("espresso", "beverages", 500, 15);
 insert into products(product_name, department_name, price, stock_quantity)
-values ("lettuce", "produce", 275, 110);
+values ("lettuce", "produce", 630, 75);
 
 select * from products;
