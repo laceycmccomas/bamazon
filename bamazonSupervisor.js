@@ -1,5 +1,5 @@
-var supervisor = function() {
-    console.log("Still a work in progress");
-}
+// var supervisor = function() {
+//     console.log("We still need to hire a Supervisor ;P ");
+// };
 
-module.exports = supervisor;
+// module.exports = supervisor;
