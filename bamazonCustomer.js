@@ -24,10 +24,10 @@ var customerListings = function() {
     conn.query("select * from products", function(err, res) {
         if (err) throw err;
         for (var m=0; m<res.length; m++) {
-            console.log(`ID: ${res[m].item_id}, Product: ${res[m].product_name}, Price: $${res[m].price}`);
+            console.log('ID: ${res[m].item_id}, Product: ${res[m].product_name}, Price: $${res[m].price}');
         }
         customerInquirer();
-    })
+    });
 };
 
 
@@ -37,12 +37,12 @@ var customerInquirer = function() {
         {
         name: "name",
         type: "input",
-        message: "What is the name of the item you would like to buy?"
+        message: "What is the item you would like to purchase?"
         },
         {
         name: "cases",
         type: "input",
-        message: "How many cases would you like to buy?"
+        message: "How many cases would you like to purchase?"
         }
     ]).then(function(response) {
         itemName = response.name;
@@ -51,7 +51,8 @@ var customerInquirer = function() {
     });
 };
 
-/
+
+
 var actualUnits, itemPrice;
 var custCheckAvail = function() {
     //search through database for quantity of id entered
@@ -63,7 +64,7 @@ var custCheckAvail = function() {
         actualUnits = data[0].stock_quantity;
         itemPrice = data[0].price;
         if(chosenUnits > actualUnits) {
-            console.log("Not Enough");
+            console.log('You need more');
             
             conn.end();
         }
@@ -78,7 +79,7 @@ var customerUpdate = function() {
     // update products set stock_quantity=200 where item_id=1;
     var newQuantity = actualUnits - chosenUnits;
     var owed = itemPrice*chosenUnits;
-    conn.query("update products set ? where ?;", [{
+    conn.query('update products set ? where ?;', [{
         stock_quantity: newQuantity,
     },
     { 
@@ -87,7 +88,7 @@ var customerUpdate = function() {
     ], function(error, response) {
         if (error) throw error;
     });
-    console.log(`You now owe Bamazon $${owed}`);
+    console.log('You now owe $${owed}');
 };
 
 module.exports = customer;
