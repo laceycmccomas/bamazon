@@ -23,7 +23,7 @@ var customer = function() {
 var customerListings = function() {
     conn.query("select * from products", function(err, res) {
         if (err) throw err;
-        for (var m=0; m<res.length; m++) {
+        for (var m = 0; m < res.length; m++) {
             console.log('ID: ${res[m].item_id}, Product: ${res[m].product_name}, Price: $${res[m].price}');
         }
         customerInquirer();
@@ -64,7 +64,7 @@ var customerAvailable = function() {
         actualCases = data[0].stock_quantity;
         itemPrice = data[0].price;
         if(chosenCases > actualCases) {
-            console.log('You need more');
+            console.log('Insufficient quantity');
             
             conn.end();
         }
@@ -89,7 +89,7 @@ var customerUpdateProducts = function() {
         if (error) throw error;
     });
 
-    
+
     console.log('You now owe $${owe}');
 };
 
