@@ -30,24 +30,24 @@ var managerInquirer = function() {
             choices: ["View All Products for Sale", "View All Low Inventory", "Add to Inventory", "Add A New Product"],
         }
     ]).then(function(view) {
-        if(view.managerView === "View All Products for Sale") {
-            allProductsForSale();
+        if(view.managerView === "View Products for Sale") {
+            productsForSale();
         }
-        else if(view.managerView === "View All Low Inventory") {
+        else if(view.managerView === "View Low Inventory") {
             allLowInventory();
         }
         else if(view.managerView === "Add to Inventory") {
             addInventory();
         }
         else if(view.managerView === "Add A New Product") {
-            addANewProduct();
+            addNewProduct();
         }
     });
 };
 
 
 
-var allProductsForSale = function() {
+var productsForSale = function() {
     conn.query("select * from products", function(err, res) {
         if (err) throw err;
         for (var m=0; m<res.length; m++) {
@@ -127,7 +127,7 @@ var addInventory = function() {
 };
 
 
-var addANewProduct = function() {
+var addNewProduct = function() {
     console.log("new products");
     inquirer.prompt([
         {
