@@ -47,40 +47,40 @@ var customerInquirer = function() {
     ]).then(function(response) {
         itemName = response.name;
         numOfCases = response.cases;
-        custCheckAvail();
+        customerAvailable();
     });
 };
 
 
 
-var actualUnits, itemPrice;
-var custCheckAvail = function() {
-    //search through database for quantity of id entered
+var actualCases, itemPrice;
+var customerAvailable = function() {
+
     conn.query("select how many, price from products where ?", 
     {
         item_id: chosenId
     }, function(err, data) {
         if (err) throw err;
-        actualUnits = data[0].stock_quantity;
+        actualCases = data[0].stock_quantity;
         itemPrice = data[0].price;
-        if(chosenUnits > actualUnits) {
+        if(chosenCases > actualCases) {
             console.log('You need more');
             
             conn.end();
         }
         else {
-            customerUpdate();
+            customerUpdateProducts();
         }
-    })       
+    });       
 };
 
 
-var customerUpdate = function() {
-    // update products set stock_quantity=200 where item_id=1;
-    var newQuantity = actualUnits - chosenUnits;
-    var owed = itemPrice*chosenUnits;
+var customerUpdateProducts = function() {
+
+    var newItemQuantity = actualCases - chosenCases;
+    var owe = itemPrice * chosenCases;
     conn.query('update products set ? where ?;', [{
-        stock_quantity: newQuantity,
+        stock_quantity: newItemQuantity,
     },
     { 
         item_id: chosenId
@@ -88,7 +88,9 @@ var customerUpdate = function() {
     ], function(error, response) {
         if (error) throw error;
     });
-    console.log('You now owe $${owed}');
+
+    
+    console.log('You now owe $${owe}');
 };
 
 module.exports = customer;

@@ -1,152 +1,158 @@
 var inquirer = require("inquirer");
 var mysql = require("mysql");
 var isPaused = true;
-//setup for connection call
-var conn = mysql.createConnection({
+
+
+
+var connection = mysql.createConnection({
     host: "localhost",
     port: 3333,
     user: "root",
     password: "root",
-    database: "bamazon"
+    database: "bamazon_db"
 });
 
-//function to connect to SQL database 
 var manager = function() {
-    //Connect to SQL database
+
     conn.connect(function(err) {
         if(err) throw err;
-        manInquirerCall();
-    })
-}
+        managerInquirer();
+    });
+};
 
-//function to check which manager view the user would like to access
-var manInquirerCall = function() {
+
+var managerInquirer = function() {
     inquirer.prompt([
         {
             type: "list",
-            name: "manView",
-            message: "What would you like to do?",
-            choices: ["View Products for Sale", "View Low Inventory", "Add to Inventory", "Add New Product"],
+            name: "Manager",
+            message: "Please choose from this list!",
+            choices: ["View All Products for Sale", "View All Low Inventory", "Add to Inventory", "Add A New Product"],
         }
     ]).then(function(view) {
-        if(view.manView === "View Products for Sale") {
-            forSale();
+        if(view.managerView === "View All Products for Sale") {
+            allProductsForSale();
         }
-        else if(view.manView === "View Low Inventory") {
-            lowInventory();
+        else if(view.managerView === "View All Low Inventory") {
+            allLowInventory();
         }
-        else if(view.manView === "Add to Inventory") {
+        else if(view.managerView === "Add to Inventory") {
             addInventory();
         }
-        else if(view.manView === "Add New Product") {
-            newProduct();
+        else if(view.managerView === "Add A New Product") {
+            addANewProduct();
         }
-    })
+    });
 };
 
-//function that allows manager to see items currently for sale
-var forSale = function() {
+
+
+var allProductsForSale = function() {
     conn.query("select * from products", function(err, res) {
         if (err) throw err;
         for (var m=0; m<res.length; m++) {
-            console.log(`ID: ${res[m].item_id}, Product: ${res[m].product_name}, Price: $${res[m].price}, Quantity: ${res[m].stock_quantity}`);
+            console.log('ID: ${res[m].item_id}, Product: ${res[m].product_name}, Price: $${res[m].price}, Quantity: ${res[m].stock_quantity}');
         }
         isPaused = false;
-    })
+    });
 };
 
-//function that lets managers see items with low inventory(less than 5 in stock)
-var lowInventory = function() {
+
+
+
+var allLowInventory = function() {
     conn.query("select * from products", function(err, res) {
         var stockArray = [];
         if (err) throw err;
-        //check if less than 5 inventory in anything
-        for (var a=0; a<res.length; a++) {
+
+        for (var a = 0; a < res.length; a++) {
             var stock = res[a].stock_quantity;
-            if (stock < 5) {
+            if (stock < 10) {
                 stockArray.push({ID:res[a].item_id, Product:res[a].product_name, Quantity:res[a].stock_quantity});
             }
         }
-        //if statement to determine if there is any low inventory
+
+
         if (stockArray.length > 0) {
-            for(var p=0; p<stockArray.length; p++) {
-                console.log(`ID: ${stockArray[p].ID}, Product: ${stockArray[p].Product}, Quantity: ${stockArray[p].Quantity}`)
+            for(var s =0; s < stockArray.length; s++) {
+                console.log('ID: ${stockArray[s].ID}, Product: ${stockArray[s].Product}, Quantity: ${stockArray[s].Quantity}')
             }
         }
         else {
             console.log("No items with low inventory");
         }
-    })
+    });
 };
 
-//function that allows managers to add inventory to preexisting items
+
 var addInventory = function() {
     isPaused = true,
-    forSale();
+    
     function paused() {
         if (isPaused) {
-            setTimeout(paused, 10);
+            setTimeout(paused, 15);
         }
         else {
             addTo();
         }
-    }
+    
     paused();
     var addTo = function() {
         inquirer.prompt([
             {
             name: "id",
             type: "input",
-            message: "What is the ID of the item you would like to update?"
+            message: "What is the name of the item?"
             },
             {
             name: "units",
             type: "input",
-            message: "What would you like to update the stock to?"
+            message: "How many would you like to add?"
             }
         ]).then(function(response) {
             conn.query("update products set ? where ?;", [{
-                stock_quantity: response.units,
+                stock_quantity: response.cases,
             },
             { 
                 item_id: response.id
             }
             ], function(error, res) {
                 if (error) throw error;
-                console.log("You have updated the stock of item ID #" + response.id + " to " + response.units + " units.");
+                console.log("You have updated" + response.id + " to " + response.cases + " cases");
             });
             isPaused = true;
-        })
-    }
+        });
+    };
+  };
 };
 
-//function that allows managers to add completely new products
-var newProduct = function() {
-    console.log("new product function");
+
+var addANewProduct = function() {
+    console.log("new products");
     inquirer.prompt([
         {
         name: "product_name",
         type: "input",
-        message: "What is the name of the item you would like to add?"
+        message: "What item would you like to add?"
         },
         {
         name: "department_name",
         type: "input",
-        message: "What is the department of the item you would like to add?"
+        message: "What department?"
         },
         {
         name: "price",
         type: "input",
-        message: "What is the price of the item you would like to add?"
+        message: "What is the price of the item?"
         },
         {
         name: "stock_quantity",
         type: "input",
-        message: "How much of the item you would like to add?"
+        message: "How much would like to add?"
         }
     ]).then(function(response) {
-        //insert into products(product_name, department_name, price, stock_quantity)
-// values ("shield", "armory", 275, 110);
+      
+
         conn.query("insert into products set ?", {
             product_name: response.product_name,
             department_name: response.department_name,
@@ -154,8 +160,8 @@ var newProduct = function() {
             stock_quantity: response.stock_quantity
         }, function(error, res) {
             if (error) throw error;
-            console.log("You have added " + response.product_name + " to the inventory.");
+            console.log("Thanks for adding " + response.product_name + " to the total stock.");
         });
-    })
-}
+    });
+};
 module.exports = manager;
