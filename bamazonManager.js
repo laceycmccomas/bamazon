@@ -3,10 +3,6 @@ var mysql = require("mysql");
 
 
 
-var isPaused = true;
-
-
-
 var connection = mysql.createConnection({
     host: "localhost",
     port: 3333,
@@ -15,16 +11,18 @@ var connection = mysql.createConnection({
     database: "bamazon_db"
 });
 
-var manager = function() {
+
+function manager() {
 
     conn.connect(function(err) {
         if(err) throw err;
         managerInquirer();
+        inquirerPrompt ();
     });
-};
+}
 
 
-var managerInquirer = function() {
+function managerInquirer() {
     inquirer.prompt([
         {
             type: "list",
@@ -46,24 +44,25 @@ var managerInquirer = function() {
             addNewProduct();
         }
     });
-};
+}
 
 
+managerInquirer ();
 
-var productsForSale = function() {
+function productsForSale() {
     conn.query("select * from products", function(err, res) {
         if (err) throw err;
         for (var m=0; m<res.length; m++) {
             console.log('ID: ${res[m].item_id}, Product: ${res[m].product_name}, Price: $${res[m].price}, Quantity: ${res[m].stock_quantity}');
         }
-        isPaused = false;
+    
     });
-};
+}
 
 
 
 
-var allLowInventory = function() {
+function allLowInventory() {
     conn.query("select * from products", function(err, res) {
         var stockArray = [];
         if (err) throw err;
@@ -85,52 +84,37 @@ var allLowInventory = function() {
             console.log("No items with low inventory");
         }
     });
-};
+}
 
 
-var addInventory = function() {
-    isPaused = true,
-    
-    function paused() {
-        if (isPaused) {
-            setTimeout(paused, 15);
+function addInventory() {
+
+    inquirer.prompt([
+        {
+        name: "id",
+        type: "input",
+        message: "What is the name of the item?"
+        },
+        {
+        name: "units",
+        type: "input",
+        message: "How many would you like to add?"
         }
-        else {
-            addTo();
+    ]).then(function(response) {
+        conn.query("update products set ? where ?;", [{
+            stock_quantity: response.cases,
+        },
+        { 
+            item_id: response.id
         }
-    
-    paused();
-    var addTo = function() {
-        inquirer.prompt([
-            {
-            name: "id",
-            type: "input",
-            message: "What is the name of the item?"
-            },
-            {
-            name: "units",
-            type: "input",
-            message: "How many would you like to add?"
-            }
-        ]).then(function(response) {
-            conn.query("update products set ? where ?;", [{
-                stock_quantity: response.cases,
-            },
-            { 
-                item_id: response.id
-            }
-            ], function(error, res) {
-                if (error) throw error;
-                console.log("You have updated" + response.id + " to " + response.cases + " cases");
-            });
-            isPaused = true;
+        ], function(error, res) {
+            if (error) throw error;
+            console.log("You have updated" + response.id + " to " + response.cases + " cases");
         });
-    };
-  
-  };
-};
+    });
+}
 
-var addNewProduct = function() {
+function addNewProduct() {
     console.log("new products");
     inquirer.prompt([
         {
@@ -166,5 +150,6 @@ var addNewProduct = function() {
             console.log("Thanks for adding " + response.product_name + " to the total stock.");
         });
     });
-};
-module.exports = manager;
+}
+
+module.exports = bamazonManager;

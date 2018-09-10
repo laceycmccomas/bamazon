@@ -11,16 +11,16 @@ var connection = mysql.createConnection({
     database: "bamazon_db"
 });
 
-var customer = function() {   
+function customer () {   
 
     conn.connect(function(err) {
         if(err) throw err;
         customerListings();
     });
-};
+}
 
 
-var customerListings = function() {
+function customerListings() {
     conn.query("select * from products", function(err, res) {
         if (err) throw err;
         for (var m = 0; m < res.length; m++) {
@@ -28,11 +28,33 @@ var customerListings = function() {
         }
         customerInquirer();
     });
-};
+}
+
+// function initialDisplay() {
+//     console.log("------------BAMazon-------------");
+//         connection.query("select * from products", function(error, response) {
+//         if (error) throw error;
+// // // console.log(query);
+//             for (var i = 0; i < response.length; i++){
+//                 console.log(response[i].item_id + " |" + response[i].product_name + " | " + response[i].department_name + " | " + response[i].price + " | " + response[i].stock_quantity );
+                
+//             }
 
 
 
-var customerInquirer = function() {
+//  var customerListings = function() {
+//      connection.query("select * from products", function(err, res) {
+//          if (err) throw err;
+         
+//          for (var i = 0; i < response.length)
+//      })
+//  }           
+        
+
+
+
+
+function customerInquirer() {
     inquirer.prompt([
         {
         name: "name",
@@ -49,12 +71,12 @@ var customerInquirer = function() {
         numOfCases = response.cases;
         customerAvailable();
     });
-};
+}
 
 
 
 var actualCases, itemPrice;
-var customerAvailable = function() {
+function customerAvailable() {
 
     conn.query("select how many, price from products where ?", 
     {
@@ -72,10 +94,10 @@ var customerAvailable = function() {
             customerUpdateProducts();
         }
     });       
-};
+}
 
 
-var customerUpdateProducts = function() {
+function customerUpdateProducts() {
 
     var newItemQuantity = actualCases - chosenCases;
     var owe = itemPrice * chosenCases;
@@ -91,6 +113,6 @@ var customerUpdateProducts = function() {
 
 
     console.log('You now owe $${owe}');
-};
+}
 
 module.exports = customer;
