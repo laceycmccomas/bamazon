@@ -31,5 +31,14 @@ insert into products(product_name, department_name, price, stock_quantity)
 values ("espresso", "beverages", 500, 15);
 insert into products(product_name, department_name, price, stock_quantity)
 values ("lettuce", "produce", 630, 75);
+insert into products(product_name, department_name, price, stock_quantity)
+values ("pinot grigio", "beverage", 16, 800);
+insert into products(product_name, department_name, price, stock_quantity)
+values ("moscato", "beverage", 16, 800);
+insert into products(product_name, department_name, price, stock_quantity)
+values ("shiraz", "beverage", 16, 800);
+
+
+
 
 select * from products;
