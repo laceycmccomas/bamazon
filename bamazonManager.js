@@ -78,7 +78,7 @@ var allLowInventory = function() {
 
         if (stockArray.length > 0) {
             for(var s =0; s < stockArray.length; s++) {
-                console.log('ID: ${stockArray[s].ID}, Product: ${stockArray[s].Product}, Quantity: ${stockArray[s].Quantity}')
+                console.log('ID: ${stockArray[s].ID}, Product: ${stockArray[s].Product}, Quantity: ${stockArray[s].Quantity}');
             }
         }
         else {
@@ -126,9 +126,9 @@ var addInventory = function() {
             isPaused = true;
         });
     };
+  
   };
 };
-
 
 var addNewProduct = function() {
     console.log("new products");
