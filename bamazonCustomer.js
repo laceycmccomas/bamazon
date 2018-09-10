@@ -1,6 +1,6 @@
 var inquirer = require("inquirer");
 var mysql = require("mysql");
-var inquirerCall = require("./index");
+
 
 
 var connection = mysql.createConnection({
