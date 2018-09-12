@@ -5,7 +5,7 @@ var mysql = require("mysql");
 
 var connection = mysql.createConnection({
     host: "localhost",
-    port: 3333,
+    port: 3306,
     user: "root",
     password: "root",
     database: "bamazon_db"
@@ -30,28 +30,6 @@ function customerListings() {
     });
 }
 
-// function initialDisplay() {
-//     console.log("------------BAMazon-------------");
-//         connection.query("select * from products", function(error, response) {
-//         if (error) throw error;
-// // // console.log(query);
-//             for (var i = 0; i < response.length; i++){
-//                 console.log(response[i].item_id + " |" + response[i].product_name + " | " + response[i].department_name + " | " + response[i].price + " | " + response[i].stock_quantity );
-                
-//             }
-
-
-
-//  var customerListings = function() {
-//      connection.query("select * from products", function(err, res) {
-//          if (err) throw err;
-         
-//          for (var i = 0; i < response.length)
-//      })
-//  }           
-        
-
-
 
 
 function customerInquirer() {
@@ -75,7 +53,6 @@ function customerInquirer() {
 
 
 
-var actualCases, itemPrice;
 function customerAvailable() {
 
     conn.query("select how many, price from products where ?", 
@@ -115,4 +92,4 @@ function customerUpdateProducts() {
     console.log('You now owe $${owe}');
 }
 
-module.exports = customer;
+module.exports = bamazonCustomer;
