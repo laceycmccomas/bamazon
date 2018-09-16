@@ -12,31 +12,29 @@ create table products(
 );
 
 insert into products(product_name, department_name, price, stock_quantity)
-values ("salmon", "seafood", 1, 9000);
+values ("salmon", "seafood", 1, 60);
 insert into products(product_name, department_name, price, stock_quantity)
-values ("apple", "produce", 6, 450);
+values ("apple", "produce", 6, 45);
 insert into products(product_name, department_name, price, stock_quantity)
-values ("lipstick", "cosmetics", 25, 300);
+values ("lipstick", "cosmetics", 25, 30);
 insert into products(product_name, department_name, price, stock_quantity)
 values ("toilet paper", "household", 23, 86);
 insert into products(product_name, department_name, price, stock_quantity)
-values ("spatula", "household", 2, 465);
+values ("spatula", "household", 2, 46);
 insert into products(product_name, department_name, price, stock_quantity)
-values ("shower curtain", "household", 10, 271);
+values ("shower curtain", "household", 10, 27);
 insert into products(product_name, department_name, price, stock_quantity)
-values ("pinot noir", "beverages", 16, 800);
+values ("pinot noir", "beverages", 16, 80);
 insert into products(product_name, department_name, price, stock_quantity)
-values ("olives", "produce", 365, 200);
+values ("olives", "produce", 36, 20);
 insert into products(product_name, department_name, price, stock_quantity)
-values ("espresso", "beverages", 500, 15);
+values ("espresso", "beverages", 50, 15);
 insert into products(product_name, department_name, price, stock_quantity)
-values ("lettuce", "produce", 630, 75);
+values ("lettuce", "produce", 63, 75);
 insert into products(product_name, department_name, price, stock_quantity)
-values ("pinot grigio", "beverage", 16, 800);
+values ("pinot grigio", "beverage", 16, 80);
 insert into products(product_name, department_name, price, stock_quantity)
-values ("moscato", "beverage", 16, 800);
-insert into products(product_name, department_name, price, stock_quantity)
-values ("shiraz", "beverage", 16, 800);
+values ("moscato", "beverage", 16, 80);
 
 
 

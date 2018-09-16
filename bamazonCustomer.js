@@ -1,4 +1,5 @@
 var inquirer = require("inquirer");
+
 var mysql = require("mysql");
 
 
@@ -11,85 +12,73 @@ var connection = mysql.createConnection({
     database: "bamazon_db"
 });
 
-function customer () {   
+connection.connect (function(err) {
+    if(err) throw err;
+    console.log("Connected as id" + connection.threadId);
+    displayItems();
+});
 
-    conn.connect(function(err) {
+
+function displayItems() {
+    console.log("display all items for sale")
+    connection.query("select * from products", function(err, res) {
         if(err) throw err;
-        customerListings();
-    });
-}
-
-
-function customerListings() {
-    conn.query("select * from products", function(err, res) {
-        if (err) throw err;
-        for (var m = 0; m < res.length; m++) {
-            console.log('ID: ${res[m].item_id}, Product: ${res[m].product_name}, Price: $${res[m].price}');
+        for (var i = 0; i < res.length; i++) {
+            console.log(response[i].item_id + response[i].product_name + response[i].department_name + response[i].price + response[i].stock_quantity);
         }
-        customerInquirer();
+
     });
 }
 
+askUserQuestions();
 
-
-function customerInquirer() {
+function askUserQuestions() {
     inquirer.prompt([
         {
-        name: "name",
+        name: "product_name",
         type: "input",
-        message: "What is the item you would like to purchase?"
+        message: "What is the ID of the product you would like to buy?"
         },
         {
-        name: "cases",
+        name: "howMany",
         type: "input",
-        message: "How many cases would you like to purchase?"
+        message: "How many units of the product would you like to buy?"
         }
-    ]).then(function(response) {
-        itemName = response.name;
-        numOfCases = response.cases;
-        customerAvailable();
+    ]).then(function(res) {
+        product_name = res.product_name;
+        howMany = res.howMany;
+        productQuantity();
     });
 }
 
-
-
-function customerAvailable() {
-
-    conn.query("select how many, price from products where ?", 
+function productQuantity() {
+    connection.query("select how many products where ?",
     {
-        item_id: chosenId
-    }, function(err, data) {
+        product_name: howMany
+
+    }, function (err, res) {
         if (err) throw err;
-        actualCases = data[0].stock_quantity;
-        itemPrice = data[0].price;
-        if(chosenCases > actualCases) {
-            console.log('Insufficient quantity');
-            
-            conn.end();
-        }
-        else {
-            customerUpdateProducts();
-        }
-    });       
-}
-
-
-function customerUpdateProducts() {
-
-    var newItemQuantity = actualCases - chosenCases;
-    var owe = itemPrice * chosenCases;
-    conn.query('update products set ? where ?;', [{
-        stock_quantity: newItemQuantity,
-    },
-    { 
-        item_id: chosenId
-    }
-    ], function(error, response) {
-        if (error) throw error;
+        console.log(res.howMany + product_name);
+        // updateProducts();
     });
-
-
-    console.log('You now owe $${owe}');
 }
+
+
+
+// function updateProducts () {
+//     console.log("updating");
+//     connection.query("update products set ? where ?"),
+//     [{
+//         stock_quantity: [i]
+//     },
+//     {
+//         product_name: [i]
+//     }
+//     ], function (err, res) {
+//         if (err) throw err;
+//         console.log("Insufficient Quantity");
+//     };
+
+// }
 
 module.exports = bamazonCustomer;
